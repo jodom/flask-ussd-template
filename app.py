@@ -7,13 +7,11 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    ussdChannel = "*384*8040#" # Your ussd channel from Africa's Talking
+    return render_template('index.html', channel=ussdChannel)
 
-@app.route('/ussd', methods=['GET', 'POST'])
+@app.route('/ussd', methods=['POST'])
 def ussdSession():
-
-    if request.method == 'GET':
-        return render_template('ussd.html')
 
     sessionId   = request.values.get("sessionId", None)
     serviceCode = request.values.get("serviceCode", None)
@@ -24,29 +22,39 @@ def ussdSession():
     userResponse = textArray[-1] if isinstance(textArray, list) else text
 
     # Screens
-    firstMenu  = '''CON Kenya Power
+    firstMenu = '''CON Hackathon Company
 
-    1. Account information
-    2. Buy tokens
-    3. Previous monthly Usage
-    98. More
+    1. First thing to do
+    2. Second thing to do
+    3. Third thing to do
+    98. MORE
     '''
-    secondMenu = '''CON Kenya Power
+    secondMenu = '''CON Hackathon Company
 
-    4. Get monthly bill(s) on email
-    5. Disconnection SMS alerts
-    6. Report power outages
-    7. CustomerCare Centre Numbers
-    0. Previous
+    4. Other thing to do
+    5. Even more thing to do
+    6. Last thing to do
+    0. BACK
     '''
-    error      = "END Invalid input"
+    # More menu screens ...
+
+    error     = "END Invalid input"
 
     # Session logic
     if userResponse == 0  or userResponse == '':
         menu = firstMenu
     elif userResponse == '98':
         menu = secondMenu
-    #  more logic  here
+    #  More logic
+    '''
+
+    if userResponse == 1 :
+        do something
+    if userResponse == 2 :
+        do something else
+    ...
+
+    '''
     else:
         menu = error
 
